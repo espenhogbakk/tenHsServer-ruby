@@ -1,3 +1,5 @@
+require 'httparty'
+
 module TenHsServer
 
   # Base class for TenHsServer adapters.

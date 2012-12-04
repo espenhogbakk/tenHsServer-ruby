@@ -1,7 +1,8 @@
 require 'test_helper'
 require "active_support/all"
+require 'ten_hs_server'
 
-class DevicesTest < ActiveSupport::TestCase
+class DeviceTest < ActiveSupport::TestCase
   setup do
     TenHsServer::Device.expects(:get).with(
       "?t=99&f=GetDevices",
