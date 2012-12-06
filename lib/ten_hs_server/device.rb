@@ -5,7 +5,7 @@ module TenHsServer
   # Adapter for TenHsServer devices endpoint, which returns information
   # for each of the devices in Homeseer
   class Device < Adapter
-    attr_accessor :id, :type, :location, :name, :floor, :dimmable, :status, :value
+    attr_accessor :id
 
     def initialize id
       @id = id
