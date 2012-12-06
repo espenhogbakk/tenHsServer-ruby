@@ -5,45 +5,91 @@ module TenHsServer
   # Adapter for TenHsServer devices endpoint, which returns information
   # for each of the devices in Homeseer
   class Device < Adapter
+    attr_accessor :id, :type, :location, :name, :floor, :dim, :status, :value
 
-    # Load all devices.
-    #
-    # Returns an array of hashes describing each device.
-    def self.all deep=false
-      response = get "?t=99&f=GetDevices"
-      devices = parse_devices response.body
+    def initialize id
+      @id = id
+    end
 
-      if deep
-        devices.map! do |device|
-          find device[:id]
+    def query
+      @query || @query = self.class.find(id)
+    end
+
+    # Methods
+    def toggle
+      self.class.toggle(id)
+    end
+
+    # Properties
+    def type
+      query[:type]
+    end
+
+    def location
+      query[:location]
+    end
+
+    def name
+      query[:name]
+    end
+
+    def floor
+      query[:floor]
+    end
+
+    def dim
+      query[:dim]
+    end
+
+    def status
+      query[:status]
+    end
+
+    def value
+      query[:value]
+    end
+
+    # All inside are class methods
+    class << self
+      # Load all devices.
+      #
+      # Returns an array of hashes describing each device.
+      def all deep=false
+        response = get "?t=99&f=GetDevices"
+        devices = parse_devices response.body
+
+        if deep
+          devices.map! do |device|
+            find device[:id]
+          end
         end
+        devices
       end
 
-      devices
-    end
+      # Load a single device.
+      #
+      # id - An string describing the device
+      #
+      # Returns a hash describing the device.
+      def find id
+        response = get "?t=99&f=GetDevice&d=#{id}"
 
-    # Load a single device.
-    #
-    # id - An string describing the device
-    #
-    # Returns a hash describing the device.
-    def self.find id
-      response = get "?t=99&f=GetDevice&d=#{id}"
+        parse_device response.body
+      end
 
-      parse_device response.body
-    end
+      # Toggle a device.
+      #
+      # id - An string describing the device
+      #
+      # Returns a true or false describing the status of the device
+      # false = off
+      # true = on
+      def toggle id
+        response = get "?t=99&f=ToggleDevice&d=#{id}"
 
-    # Toggle a device.
-    #
-    # id - An string describing the device
-    #
-    # Returns a true or false describing the status of the device
-    # false = off
-    # true = on
-    def self.toggle id
-      response = get "?t=99&f=ToggleDevice&d=#{id}"
+        parse_toggle_device response.body
+      end
 
-      parse_toggle_device response.body
     end
 
     private

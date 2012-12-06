@@ -22,9 +22,9 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("device_result.html")
     )
 
-    device = TenHsServer::Device.find "Q12"
-    assert_equal "Q12", device[:id]
-    assert_equal "Chandelier", device[:name]
+    device = TenHsServer::Device.new "Q12"
+    assert_equal "Q12", device.id
+    assert_equal "Chandelier", device.name
   end
 
   test "should toggle a device" do
@@ -34,8 +34,8 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("toggle_device_result.html")
     )
 
-    device = TenHsServer::Device.toggle "Q12"
-    assert_equal 2, device[:status]
+    device = TenHsServer::Device.new "Q12"
+    assert_equal 2, device.toggle[:status]
   end
 
   private
