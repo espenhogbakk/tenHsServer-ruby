@@ -10,7 +10,7 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("devices_result.html")
     )
 
-    devices = TenHsServer::Device.all true
+    devices = TenHsServer::Device.all
 
     assert_equal 13, devices.count
   end
