@@ -33,6 +33,19 @@ module TenHsServer
       parse_device response.body
     end
 
+    # Toggle a device.
+    #
+    # id - An string describing the device
+    #
+    # Returns a true or false describing the status of the device
+    # false = off
+    # true = on
+    def self.toggle id
+      response = get "?t=99&f=ToggleDevice&d=#{id}"
+
+      parse_toggle_device response.body
+    end
+
     private
 
     # Parse the GetDevices response.
@@ -96,12 +109,34 @@ module TenHsServer
           name: values[2],
           floor: values[5],
           dim: values[6],
-          status: values[7],
+          status: values[7].to_i,
           value: values[8],
           string: values[9],
           time: values[10],
           last_change: values[11],
           misc: values[4]
+        }
+      end
+      results[0]
+    end
+
+    # Parse the ToggleDevice response.
+    # 
+    # Response contains a list of the devices and their new status
+    # Q12:2;Q10:3
+    #
+    # Where device Q12 is on, and Q10 is off
+    #
+    # response - A string describing the response.
+    def self.parse_toggle_device response
+      doc = Nokogiri::HTML(response)
+      result = doc.xpath('//span[@id="Result"]')[0].content
+      results = result.split(";")
+      results.map! do |item|
+        values = item.split(":")
+        {
+          id: values[0],
+          status: values[1].to_i,
         }
       end
       results[0]

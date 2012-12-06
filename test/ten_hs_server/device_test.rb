@@ -27,6 +27,17 @@ class DeviceTest < ActiveSupport::TestCase
     assert_equal "Chandelier", device[:name]
   end
 
+  test "should toggle a device" do
+    TenHsServer::Device.expects(:get).with(
+      "?t=99&f=ToggleDevice&d=Q12",
+    ).returns(
+      stub body: fixture("toggle_device_result.html")
+    )
+
+    device = TenHsServer::Device.toggle "Q12"
+    assert_equal 2, device[:status]
+  end
+
   private
 
   # Load a fixture.
