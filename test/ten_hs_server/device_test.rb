@@ -3,23 +3,26 @@ require "active_support/all"
 require 'ten_hs_server'
 
 class DeviceTest < ActiveSupport::TestCase
-  setup do
+  test "should load all devices" do
     TenHsServer::Device.expects(:get).with(
       "?t=99&f=GetDevices",
     ).returns(
-      stub body: fixture("devicesresult.html")
+      stub body: fixture("devices_result.html")
     )
-  end
 
-  test "should load all devices" do
-    devices = TenHsServer::Device.all
+    devices = TenHsServer::Device.all true
 
     assert_equal 13, devices.count
   end
 
   test "should load a single device" do
-    device = TenHsServer::Device.find "Q12"
+    TenHsServer::Device.expects(:get).with(
+      "?t=99&f=GetDevice&d=Q12",
+    ).returns(
+      stub body: fixture("device_result.html")
+    )
 
+    device = TenHsServer::Device.find "Q12"
     assert_equal "Q12", device[:id]
     assert_equal "Chandelier", device[:name]
   end
