@@ -23,7 +23,6 @@ class DeviceTest < ActiveSupport::TestCase
     )
 
     device = TenHsServer::Device.new "Q12"
-    assert_equal "Q12", device.id
     assert_equal "Chandelier", device.name
   end
 
