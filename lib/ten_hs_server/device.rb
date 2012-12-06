@@ -5,7 +5,7 @@ module TenHsServer
   # Adapter for TenHsServer devices endpoint, which returns information
   # for each of the devices in Homeseer
   class Device < Adapter
-    attr_accessor :id, :type, :location, :name, :floor, :dim, :status, :value
+    attr_accessor :id, :type, :location, :name, :floor, :dimmable, :status, :value
 
     def initialize id
       @id = id
@@ -18,6 +18,14 @@ module TenHsServer
     # Methods
     def toggle
       self.class.toggle(id)
+    end
+
+    def on
+      self.class.on(id)
+    end
+
+    def off
+      self.class.off(id)
     end
 
     # Properties
@@ -37,15 +45,21 @@ module TenHsServer
       query[:floor]
     end
 
-    def dim
+    def dimmable
+      # Boolean that
       query[:dim]
     end
 
     def status
+      # Status of device
+      # 2 On
+      # 3 Off
+      # 4 Dimmed
       query[:status]
     end
 
     def value
+      # For dimmable devices this is a value between 0 and 100
       query[:value]
     end
 
@@ -86,6 +100,32 @@ module TenHsServer
       # true = on
       def toggle id
         response = get "?t=99&f=ToggleDevice&d=#{id}"
+
+        parse_toggle_device response.body
+      end
+
+      # Turn on a device.
+      #
+      # id - An string describing the device
+      #
+      # Returns a true or false describing the status of the device
+      # false = off
+      # true = on
+      def on id
+        response = get "?t=99&f=DeviceOn&d=#{id}"
+
+        parse_toggle_device response.body
+      end
+
+      # Turn off a device.
+      #
+      # id - An string describing the device
+      #
+      # Returns a true or false describing the status of the device
+      # false = off
+      # true = on
+      def off id
+        response = get "?t=99&f=DeviceOff&d=#{id}"
 
         parse_toggle_device response.body
       end

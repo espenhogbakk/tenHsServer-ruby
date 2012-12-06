@@ -37,6 +37,28 @@ class DeviceTest < ActiveSupport::TestCase
     assert_equal 2, device.toggle[:status]
   end
 
+  test "should turn on a device" do
+    TenHsServer::Device.expects(:get).with(
+      "?t=99&f=DeviceOn&d=Q12",
+    ).returns(
+      stub body: fixture("device_on_result.html")
+    )
+
+    device = TenHsServer::Device.new "Q12"
+    assert_equal 2, device.on[:status]
+  end
+
+  test "should turn off a device" do
+    TenHsServer::Device.expects(:get).with(
+      "?t=99&f=DeviceOff&d=Q12",
+    ).returns(
+      stub body: fixture("device_off_result.html")
+    )
+
+    device = TenHsServer::Device.new "Q12"
+    assert_equal 3, device.off[:status]
+  end
+
   private
 
   # Load a fixture.
