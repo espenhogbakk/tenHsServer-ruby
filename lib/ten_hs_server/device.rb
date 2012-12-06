@@ -37,6 +37,14 @@ module TenHsServer
 
     # Parse the GetDevices response.
     #
+    # Response contains multiple device strings, one for each device, separated by ";" 
+    # Each device string is formatted as:
+    #
+    # DeviceCode:DeviceType:Location:Name:Location2
+    #
+    # An example if only two devices were defined in Homeseer:
+    # a1:Lamp Module:Kitchen:Counter Pucks:loc2;a2:Applicance Module:Den:Ceiling Light:Loc2;
+    #
     # response - A string describing the response.
     def self.parse_devices response
       doc = Nokogiri::HTML(response)
