@@ -28,6 +28,15 @@ module TenHsServer
       self.class.off(id)
     end
 
+    def dim value
+      if value == 0
+        off
+      else
+        on
+        self.class.value(id, value)
+      end
+    end
+
     # Properties
     def type
       query[:type]
@@ -130,6 +139,17 @@ module TenHsServer
         parse_toggle_device response.body
       end
 
+      # Set device value.
+      #
+      # id - An string describing the device
+      # value - The value to give the device
+      #
+      def value(id, value)
+        response = get "?t=99&f=SetDeviceValue&d=#{id}&a=#{value}"
+
+        parse_set_device_value response.body
+      end
+
     end
 
     private
@@ -226,6 +246,17 @@ module TenHsServer
         }
       end
       results[0]
+    end
+
+    # Parse the SetDeviceValue response.
+    # 
+    # Response contains the new value of the device
+    #
+    # response - A string describing the response.
+    def self.parse_set_device_value response
+      doc = Nokogiri::HTML(response)
+      result = doc.xpath('//span[@id="Result"]')[0].content
+      result.to_i
     end
 
   end

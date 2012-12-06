@@ -59,6 +59,22 @@ class DeviceTest < ActiveSupport::TestCase
     assert_equal 3, device.off[:status]
   end
 
+  test "should dim a device" do
+    TenHsServer::Device.expects(:get).with(
+      "?t=99&f=DeviceOn&d=Q12",
+    ).returns(
+      stub body: fixture("device_on_result.html")
+    )
+    TenHsServer::Device.expects(:get).with(
+      "?t=99&f=SetDeviceValue&d=Q12&a=70",
+    ).returns(
+      stub body: fixture("set_device_value_result.html")
+    )
+
+    device = TenHsServer::Device.new "Q12"
+    assert_equal 70, device.dim(70)
+  end
+
   private
 
   # Load a fixture.
