@@ -3,23 +3,38 @@ require "active_support/all"
 require 'ten_hs_server'
 
 class EventTest < ActiveSupport::TestCase
-  setup do
+  test "should load all events" do
     TenHsServer::Event.expects(:get).with(
       "?t=99&f=GetEvents",
     ).returns(
       stub body: fixture("events_result.html")
     )
-  end
 
-  test "should load all events" do
     events = TenHsServer::Event.all
 
     assert_equal 8, events.count
   end
 
   test "should load a single event" do
-    event = TenHsServer::Event.find 0
-    assert_equal "All on", event[:name]
+    TenHsServer::Event.expects(:get).with(
+      "?t=99&f=GetEvents",
+    ).returns(
+      stub body: fixture("events_result.html")
+    )
+
+    event = TenHsServer::Event.find "All on"
+    assert_equal "All on", event
+  end
+
+  test "should run an event" do
+    TenHsServer::Event.expects(:get).with(
+      "?t=99&f=RunEvent&d=All%20on",
+    ).returns(
+      stub body: fixture("runevent_result.html")
+    )
+
+    status = TenHsServer::Event.run "All on"
+    assert_equal true, status
   end
 
   private

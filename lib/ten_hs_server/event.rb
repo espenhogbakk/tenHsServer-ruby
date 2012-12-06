@@ -17,11 +17,22 @@ module TenHsServer
 
     # Load a single event.
     #
-    # id - An string describing the event
+    # name - An string describing the event
     #
-    # Returns a hash describing the event.
-    def self.find id
-      all.find { |s| s[:id] == id }
+    # Returns the name of the event
+    def self.find name
+      all.find { |event| event == name }
+    end
+
+    # Run an event.
+    #
+    # name - An string describing the event
+    #
+    # Returns a bool describing if the event was run or not
+    def self.run name
+      response = get "?t=99&f=RunEvent&d=All%20on"
+      
+      parse_runevent response.body
     end
 
     private
@@ -37,12 +48,29 @@ module TenHsServer
       result = doc.xpath('//span[@id="Result"]')[0].content
       results = result.split(";")
       
-      results.each_with_index.map do |item, index|
-        {
-          id: index,
-          name: item,
-        }
+      results.map do |item|
+        item
       end
     end
+
+    # Parse the RunEvent response.
+    #
+    # Response contains either 1 or 0
+    # 1 = event was run
+    # 0 = event failed to run
+    # 
+    # response - A string describing the response.
+    def self.parse_runevent response
+      doc = Nokogiri::HTML(response)
+      result = doc.xpath('//span[@id="Result"]')[0].content
+      
+      if result == "1"
+        true
+      else
+        false
+      end
+      
+    end
+
   end
 end
