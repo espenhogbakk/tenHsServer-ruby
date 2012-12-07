@@ -1,5 +1,3 @@
-require 'nokogiri'
-
 module TenHsServer
 
   # Adapter for TenHsServer devices endpoint, which returns information

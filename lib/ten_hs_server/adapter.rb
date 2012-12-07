@@ -1,4 +1,5 @@
 require 'httparty'
+require 'nokogiri'
 
 module TenHsServer
 
