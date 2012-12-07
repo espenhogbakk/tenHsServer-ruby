@@ -75,6 +75,18 @@ class DeviceTest < ActiveSupport::TestCase
     assert_equal 70, device.dim(70)
   end
 
+  test "should ask a device if its on or off" do
+    TenHsServer::Device.expects(:get).with(
+      "?t=99&f=GetDevice&d=Q12",
+    ).returns(
+      stub body: fixture("device_result.html")
+    )
+
+    device = TenHsServer::Device.new "Q12"
+    assert_equal false, device.on?
+    assert_equal true, device.off?
+  end
+
   private
 
   # Load a fixture.
