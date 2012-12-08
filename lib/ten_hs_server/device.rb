@@ -3,10 +3,14 @@ module TenHsServer
   # Adapter for TenHsServer devices endpoint, which returns information
   # for each of the devices in Homeseer
   class Device < Adapter
-    attr_accessor :id
+    attr_reader :id, :_name, :_type, :_room, :_floor
 
-    def initialize id
+    def initialize id, name=nil, type=nil, room=nil, floor=nil
       @id = id
+      @_name = name
+      @_type = type
+      @_room = room
+      @_floor = floor
     end
 
     def query
@@ -45,19 +49,19 @@ module TenHsServer
     end
 
     def type
-      query[:type]
+      _type ? _type : query[:type]
     end
 
-    def location
-      query[:location]
+    def room
+      _room ? _room : query[:location]
     end
 
     def name
-      query[:name]
+      _name ? _name : query[:name]
     end
 
     def floor
-      query[:floor]
+      _floor ? _floor : query[:floor]
     end
 
     def dimmable
@@ -82,16 +86,15 @@ module TenHsServer
     class << self
       # Load all devices.
       #
-      # Returns an array of hashes describing each device.
-      def all deep=false
+      # Returns an array of Device instances.
+      def all
         response = get "?t=99&f=GetDevices"
         devices = parse_devices response.body
 
-        if deep
-          devices.map! do |device|
-            find device[:id]
-          end
+        devices.map! do |device|
+          new(device[:id], device[:name], device[:type], device[:location], device[:floor])
         end
+
         devices
       end
 
