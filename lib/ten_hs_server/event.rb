@@ -12,7 +12,7 @@ module TenHsServer
     def self.all deep=false
       response = get "?t=99&f=GetEvents"
 
-      parse response.body
+      parse_events response.body
     end
 
     # Load a single event.
@@ -43,11 +43,10 @@ module TenHsServer
     # Event1;Event2;Eventn;
     #
     # response - A string describing the response.
-    def self.parse response
-      doc = Nokogiri::HTML(response)
-      result = doc.xpath('//span[@id="Result"]')[0].content
+    def self.parse_events response
+      result = parse response
       results = result.split(";")
-      
+
       results.map do |item|
         item
       end
@@ -61,15 +60,14 @@ module TenHsServer
     # 
     # response - A string describing the response.
     def self.parse_runevent response
-      doc = Nokogiri::HTML(response)
-      result = doc.xpath('//span[@id="Result"]')[0].content
-      
+      result = parse response
+
       if result == "1"
         true
       else
         false
       end
-      
+
     end
 
   end

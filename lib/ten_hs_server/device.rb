@@ -175,10 +175,9 @@ module TenHsServer
     #
     # response - A string describing the response.
     def self.parse_devices response
-      doc = Nokogiri::HTML(response)
-      result = doc.xpath('//span[@id="Result"]')[0].content
+      result = parse response
       results = result.split(";")
-      
+
       results.map do |item|
         # DeviceCode:DeviceType:Location:Name:Location2
         values = item.split(":")
@@ -212,9 +211,9 @@ module TenHsServer
     #
     # response - A string describing the response.
     def self.parse_device response
-      doc = Nokogiri::HTML(response)
-      result = doc.xpath('//span[@id="Result"]')[0].content
+      result = parse response
       results = result.split(";")
+
       results.map! do |item|
         values = item.split(":")
         {
@@ -244,9 +243,9 @@ module TenHsServer
     #
     # response - A string describing the response.
     def self.parse_toggle_device response
-      doc = Nokogiri::HTML(response)
-      result = doc.xpath('//span[@id="Result"]')[0].content
+      result = parse response
       results = result.split(";")
+
       results.map! do |item|
         values = item.split(":")
         {
@@ -263,8 +262,7 @@ module TenHsServer
     #
     # response - A string describing the response.
     def self.parse_set_device_value response
-      doc = Nokogiri::HTML(response)
-      result = doc.xpath('//span[@id="Result"]')[0].content
+      result = parse response
       result.to_i
     end
 
