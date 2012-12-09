@@ -22,18 +22,12 @@ module TenHsServer
     end
 
     def on
-      devices.each do |device|
-        device.on
-      end
-      
+      status = self.class.on(devices)
       true
     end
 
     def off
-      devices.each do |device|
-        device.off
-      end
-      
+      status = self.class.off(devices)
       true
     end
 
@@ -80,6 +74,56 @@ module TenHsServer
 
       end
 
+      # Turn on all devices in this room.
+      #
+      # devices - An array with devices
+      def on devices
+        ids = devices.map { |device| device.id }
+        ids = ids.join(".")
+        response = get "?t=99&f=DeviceOn&d=#{ids}"
+
+        parse_toggle_devices response.body
+      end
+
+      # Turn off a device.
+      #
+      # id - An string describing the device
+      #
+      # Returns a true or false describing the status of the device
+      # false = off
+      # true = on
+      def off devices
+        ids = devices.map { |device| device.id }
+        ids = ids.join(".")
+        response = get "?t=99&f=DeviceOff&d=#{ids}"
+
+        parse_toggle_devices response.body
+      end
+
+    end
+
+    private
+
+    # Parse the ToggleDevice response.
+    # 
+    # Response contains a list of the devices and their new status
+    # Q12:2;Q10:3
+    #
+    # Where device Q12 is on, and Q10 is off
+    #
+    # response - A string describing the response.
+    def self.parse_toggle_devices response
+      result = parse response
+      results = result.split(";")
+
+      results.map! do |item|
+        values = item.split(":")
+        {
+          id: values[0],
+          status: values[1].to_i,
+        }
+      end
+      results
     end
 
   end

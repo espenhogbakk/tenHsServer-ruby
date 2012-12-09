@@ -33,15 +33,10 @@ class RoomTest < ActiveSupport::TestCase
     ).returns(
       stub body: fixture("devices_result.html")
     )
-    TenHsServer::Device.expects(:get).with(
-      "?t=99&f=DeviceOn&d=Q5",
+    TenHsServer::Room.expects(:get).with(
+      "?t=99&f=DeviceOn&d=Q12.Q5",
     ).returns(
-      stub body: fixture("device_on_result.html")
-    )
-    TenHsServer::Device.expects(:get).with(
-      "?t=99&f=DeviceOn&d=Q12",
-    ).returns(
-      stub body: fixture("device_on_result.html")
+      stub body: fixture("dining_room_on_result.html")
     )
 
     room = TenHsServer::Room.new "Dining room"
@@ -54,15 +49,10 @@ class RoomTest < ActiveSupport::TestCase
     ).returns(
       stub body: fixture("devices_result.html")
     )
-    TenHsServer::Device.expects(:get).with(
-      "?t=99&f=DeviceOff&d=Q5",
+    TenHsServer::Room.expects(:get).with(
+      "?t=99&f=DeviceOff&d=Q12.Q5",
     ).returns(
-      stub body: fixture("device_off_result.html")
-    )
-    TenHsServer::Device.expects(:get).with(
-      "?t=99&f=DeviceOff&d=Q12",
-    ).returns(
-      stub body: fixture("device_off_result.html")
+      stub body: fixture("dining_room_off_result.html")
     )
 
     room = TenHsServer::Room.new "Dining room"
