@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = ["espen@hogbakk.no"]
   s.homepage    = ""
   s.summary     = "tenHsServer Homeseer API wrapper."
-  s.description = "API wrapper around the super crappy tenHsServer Homeseer HS2 plugin."
+  s.description = "API wrapper around the (crappy) tenHsServer Homeseer HS2 plugin."
 
   s.rubyforge_project = "ten_hs_server"
 
