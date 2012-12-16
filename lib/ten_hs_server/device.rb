@@ -231,7 +231,16 @@ module TenHsServer
           misc: values[4]
         }
       end
-      results[0]
+
+      if results.length > 1
+        raise MultipleFoundError
+      else
+        if results[0][:location] == 'Device Not Found'
+          raise NotFoundError
+        else
+          results[0]
+        end
+      end
     end
 
     # Parse the ToggleDevice response.

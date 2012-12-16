@@ -26,4 +26,6 @@ module TenHsServer
   end
 
   class Error < StandardError; end
+  class NotFoundError < StandardError; end
+  class MultipleFoundError < StandardError; end
 end
