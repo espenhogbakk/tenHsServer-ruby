@@ -41,11 +41,11 @@ module TenHsServer
 
     # Properties
     def on?
-      true ? query[:status] == 2 : false
+      query[:status] == 2 ? true : false
     end
 
     def off?
-      true ? query[:status] == 3 : false
+      query[:status] == 3 ? true : false
     end
 
     def type
