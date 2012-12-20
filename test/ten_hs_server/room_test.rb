@@ -27,6 +27,17 @@ class RoomTest < ActiveSupport::TestCase
     assert_equal 2, room.devices.count
   end
 
+  test "should try to load a room with no devices or an unexisting room" do
+    TenHsServer::Device.expects(:get).with(
+      "?t=99&f=GetDevices",
+    ).returns(
+      stub body: fixture("devices_result.html")
+    )
+
+    room = TenHsServer::Room.new "Foobar"
+    assert_equal nil, room.floor
+  end
+
   test "should turn on everything in a room" do
     TenHsServer::Device.expects(:get).with(
       "?t=99&f=GetDevices",

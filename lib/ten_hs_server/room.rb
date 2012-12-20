@@ -65,10 +65,10 @@ module TenHsServer
             devices_in_room << device
           end
         end
-        
+
         {
           name: name,
-          floor: devices_in_room[0].floor,
+          floor: devices_in_room.any? ? devices_in_room[0].floor : nil,
           devices: devices_in_room
         }
 
