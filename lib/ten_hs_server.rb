@@ -1,3 +1,8 @@
+# This is a ruby wrapper around the tenHsServer Homeseer API
+#
+# Author: Espen Høgbakk
+# Email: espen@hogbakk.no
+
 require "ten_hs_server/version"
 
 module TenHsServer
