@@ -3,6 +3,8 @@ require "active_support/all"
 require 'ten_hs_server'
 
 class RoomTest < ActiveSupport::TestCase
+  client = TenHsServer.new '10.0.0.71'
+
   test "should load all rooms" do
     TenHsServer::Device.expects(:get).with(
       "?t=99&f=GetDevices",
@@ -10,7 +12,7 @@ class RoomTest < ActiveSupport::TestCase
       stub body: fixture("devices_result.html")
     )
 
-    rooms = TenHsServer::Room.all
+    rooms = client.room.all
 
     assert_equal 5, rooms.count
   end
@@ -22,7 +24,7 @@ class RoomTest < ActiveSupport::TestCase
       stub body: fixture("devices_result.html")
     )
 
-    room = TenHsServer::Room.new "Dining room"
+    room = client.room.new "Dining room"
     assert_equal "Dining room", room.name
     assert_equal 2, room.devices.count
   end
@@ -34,7 +36,7 @@ class RoomTest < ActiveSupport::TestCase
       stub body: fixture("devices_result.html")
     )
 
-    room = TenHsServer::Room.new "Foobar"
+    room = client.room.new "Foobar"
     assert_equal nil, room.floor
   end
 
@@ -50,7 +52,7 @@ class RoomTest < ActiveSupport::TestCase
       stub body: fixture("dining_room_on_result.html")
     )
 
-    room = TenHsServer::Room.new "Dining room"
+    room = client.room.new "Dining room"
     assert_equal true, room.on
   end
 
@@ -66,7 +68,7 @@ class RoomTest < ActiveSupport::TestCase
       stub body: fixture("dining_room_off_result.html")
     )
 
-    room = TenHsServer::Room.new "Dining room"
+    room = client.room.new "Dining room"
     assert_equal true, room.off
   end
 

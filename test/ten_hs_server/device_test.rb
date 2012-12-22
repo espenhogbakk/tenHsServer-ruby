@@ -3,6 +3,8 @@ require "active_support/all"
 require 'ten_hs_server'
 
 class DeviceTest < ActiveSupport::TestCase
+  client = TenHsServer.new '10.0.0.71'
+
   test "should load all devices" do
     TenHsServer::Device.expects(:get).with(
       "?t=99&f=GetDevices",
@@ -10,7 +12,7 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("devices_result.html")
     )
 
-    devices = TenHsServer::Device.all
+    devices = client.device.all
 
     assert_equal 13, devices.count
   end
@@ -22,7 +24,7 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("device_result.html")
     )
 
-    device = TenHsServer::Device.new "Q12"
+    device = client.device.new "Q12"
     assert_equal "Chandelier", device.name
   end
 
@@ -33,7 +35,7 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("insteon_device_result.html")
     )
 
-    device = TenHsServer::Device.new "\\15"
+    device = client.device.new "\\15"
     assert_equal "Chandelier", device.name
   end
 
@@ -44,7 +46,7 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("toggle_device_result.html")
     )
 
-    device = TenHsServer::Device.new "Q12"
+    device = client.device.new "Q12"
     assert_equal 2, device.toggle[:status]
   end
 
@@ -55,7 +57,7 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("device_on_result.html")
     )
 
-    device = TenHsServer::Device.new "Q12"
+    device = client.device.new "Q12"
     assert_equal 2, device.on[:status]
   end
 
@@ -66,7 +68,7 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("device_off_result.html")
     )
 
-    device = TenHsServer::Device.new "Q12"
+    device = client.device.new "Q12"
     assert_equal 3, device.off[:status]
   end
 
@@ -82,7 +84,7 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("set_device_value_result.html")
     )
 
-    device = TenHsServer::Device.new "Q12"
+    device = client.device.new "Q12"
     assert_equal 70, device.dim(70)
   end
 
@@ -93,7 +95,7 @@ class DeviceTest < ActiveSupport::TestCase
       stub body: fixture("device_result.html")
     )
 
-    device = TenHsServer::Device.new "Q12"
+    device = client.device.new "Q12"
     assert_equal false, device.on?
     assert_equal true, device.off?
   end

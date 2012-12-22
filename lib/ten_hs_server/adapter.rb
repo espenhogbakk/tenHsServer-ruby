@@ -8,7 +8,7 @@ module TenHsServer
   class Adapter
     include HTTParty
 
-    base_uri "10.0.0.71/tenHsServer/tenHsServer.aspx"
+    base_uri "#{TenHsServer.host}/tenHsServer/tenHsServer.aspx"
 
     private
 
