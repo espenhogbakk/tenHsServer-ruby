@@ -79,7 +79,7 @@ module TenHsServer
       # devices - An array with devices
       def on devices
         ids = devices.map { |device| device.id }
-        ids = ids.join(".")
+        ids = URI::encode(ids.join("."))
         response = get "?t=99&f=DeviceOn&d=#{ids}"
 
         parse_toggle_devices response.body
@@ -94,7 +94,7 @@ module TenHsServer
       # true = on
       def off devices
         ids = devices.map { |device| device.id }
-        ids = ids.join(".")
+        ids = URI::encode(ids.join("."))
         response = get "?t=99&f=DeviceOff&d=#{ids}"
 
         parse_toggle_devices response.body

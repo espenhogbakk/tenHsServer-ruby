@@ -26,6 +26,17 @@ class DeviceTest < ActiveSupport::TestCase
     assert_equal "Chandelier", device.name
   end
 
+  test "should load a single insteon device" do
+    TenHsServer::Device.expects(:get).with(
+      "?t=99&f=GetDevice&d=%5C15",
+    ).returns(
+      stub body: fixture("insteon_device_result.html")
+    )
+
+    device = TenHsServer::Device.new "\\15"
+    assert_equal "Chandelier", device.name
+  end
+
   test "should toggle a device" do
     TenHsServer::Device.expects(:get).with(
       "?t=99&f=ToggleDevice&d=Q12",

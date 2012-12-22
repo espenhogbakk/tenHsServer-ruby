@@ -30,6 +30,7 @@ module TenHsServer
     #
     # Returns a bool describing if the event was run or not
     def self.run name
+      name = URI::encode(name)
       response = get "?t=99&f=RunEvent&d=All%20on"
       
       parse_runevent response.body

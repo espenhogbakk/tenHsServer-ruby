@@ -104,6 +104,7 @@ module TenHsServer
       #
       # Returns a hash describing the device.
       def find id
+        id = URI::encode(id)
         response = get "?t=99&f=GetDevice&d=#{id}"
 
         parse_device response.body
@@ -117,6 +118,7 @@ module TenHsServer
       # false = off
       # true = on
       def toggle id
+        id = URI::encode(id)
         response = get "?t=99&f=ToggleDevice&d=#{id}"
 
         parse_toggle_device response.body
@@ -130,6 +132,7 @@ module TenHsServer
       # false = off
       # true = on
       def on id
+        id = URI::encode(id)
         response = get "?t=99&f=DeviceOn&d=#{id}"
 
         parse_toggle_device response.body
@@ -143,6 +146,7 @@ module TenHsServer
       # false = off
       # true = on
       def off id
+        id = URI::encode(id)
         response = get "?t=99&f=DeviceOff&d=#{id}"
 
         parse_toggle_device response.body
@@ -154,6 +158,8 @@ module TenHsServer
       # value - The value to give the device
       #
       def value(id, value)
+        id = URI::encode(id)
+        value = URI::encode(value.to_s)
         response = get "?t=99&f=SetDeviceValue&d=#{id}&a=#{value}"
 
         parse_set_device_value response.body
