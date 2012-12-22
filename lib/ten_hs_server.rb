@@ -21,15 +21,15 @@ module TenHsServer
   autoload :Room, "ten_hs_server/room"
 
   def self.event
-    return TenHsServer::Event
+    TenHsServer::Event
   end
 
   def self.device
-    return TenHsServer::Device
+    TenHsServer::Device
   end
 
   def self.room
-    return TenHsServer::Room
+    TenHsServer::Room
   end
 
 end
